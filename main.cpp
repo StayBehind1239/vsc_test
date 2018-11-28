@@ -156,26 +156,19 @@ int main (void)
   size_t i, iter = 0;
 
   const size_t n = 2;
-  struct mparams{
-    double dt1;
-    double dt2;
-    double s1_x;
-    double s1_y;
-    double s2_x;
-    double s2_y;
-    double s3_x;
-    double s3_y;
-    double s1_v00;
-    double s1_v90;
-    double s2_v00;
-    double s2_v90;
-    double s3_v00;
-    double s3_v90;
+  // Data from: C:\Users\Development_02\Desktop\Code\Last Day\tests\mtt=1122\comp_data_set_all_corners\test_data_i=1.xlsx
+  // From Line 2 ! 
+  struct mparams p = {  0.00014164755186999, 0.000690475530648175,    // dt1 & dt2
+                        0.00999999999999999, 0.00999999999999999,     // s1_x & s1_y
+                        0.78, 0.0199999999999999,                     // s2_x & s2_y
+                        0.0199999999999999, 0.989999999999999,        // s3_x & s3_y
+                        5356.0, 2678.0,                                 // s1_v00 & s1_v90
+                        5356.0, 2678.0,                                 // s2_v00 & s2_v90
+                        5356.0, 2678.0,                                 // s3_v00 & s3_v90
   };
-  struct mparams p = {1.0, 10.0};
   gsl_multiroot_function f = {&mmea_f, n, &p};
 
-  double x_init[2] = {-1.0, -1.0};
+  double x_init[2] = {0.5, 0.5};
   gsl_vector *x = gsl_vector_alloc (n);
 
   gsl_vector_set (x, 0, x_init[0]);
@@ -198,7 +191,7 @@ int main (void)
         break;
 
       status = 
-        gsl_multiroot_test_residual (s->f, 1e-7);
+        gsl_multiroot_test_residual (s->f, 1e-15);
     }
   while (status == GSL_CONTINUE && iter < 1000);
 
